@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
+﻿#nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
@@ -91,6 +88,33 @@ namespace OurStory.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TB_Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsMessageDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    ID_Lovers_Sender_TB = table.Column<int>(type: "int", nullable: true),
+                    ID_Lovers_Receiver_TB = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TB_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TB_Messages_TB_Lovers_ID_Lovers_Receiver_TB",
+                        column: x => x.ID_Lovers_Receiver_TB,
+                        principalTable: "TB_Lovers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TB_Messages_TB_Lovers_ID_Lovers_Sender_TB",
+                        column: x => x.ID_Lovers_Sender_TB,
+                        principalTable: "TB_Lovers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TB_OurBlogs",
                 columns: table => new
                 {
@@ -139,7 +163,8 @@ namespace OurStory.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TB_BlogsId = table.Column<int>(type: "int", nullable: true),
-                    TB_LoversId = table.Column<int>(type: "int", nullable: true)
+                    TB_LoversId = table.Column<int>(type: "int", nullable: true),
+                    TB_MessagesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -148,6 +173,11 @@ namespace OurStory.Migrations
                         name: "FK_TB_FilePaths_TB_Lovers_TB_LoversId",
                         column: x => x.TB_LoversId,
                         principalTable: "TB_Lovers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TB_FilePaths_TB_Messages_TB_MessagesId",
+                        column: x => x.TB_MessagesId,
+                        principalTable: "TB_Messages",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_TB_FilePaths_TB_OurBlogs_TB_BlogsId",
@@ -204,8 +234,8 @@ namespace OurStory.Migrations
                 columns: new[] { "Id", "DateCreatedAt", "Description", "ID_Blog_Type_LK", "ID_Events_LK", "ID_Lovers_TB", "ID_Published_LK", "ItsDate", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 10, 18, 9, 17, 36, 270, DateTimeKind.Local).AddTicks(16), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
-                    { 2, new DateTime(2024, 10, 18, 9, 17, 36, 270, DateTimeKind.Local).AddTicks(66), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
+                    { 1, new DateTime(2024, 10, 19, 13, 54, 18, 106, DateTimeKind.Local).AddTicks(2490), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
+                    { 2, new DateTime(2024, 10, 19, 13, 54, 18, 106, DateTimeKind.Local).AddTicks(2533), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -222,6 +252,21 @@ namespace OurStory.Migrations
                 name: "IX_TB_FilePaths_TB_LoversId",
                 table: "TB_FilePaths",
                 column: "TB_LoversId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_FilePaths_TB_MessagesId",
+                table: "TB_FilePaths",
+                column: "TB_MessagesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_Messages_ID_Lovers_Receiver_TB",
+                table: "TB_Messages",
+                column: "ID_Lovers_Receiver_TB");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_Messages_ID_Lovers_Sender_TB",
+                table: "TB_Messages",
+                column: "ID_Lovers_Sender_TB");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TB_OurBlogs_ID_Blog_Type_LK",
@@ -252,6 +297,9 @@ namespace OurStory.Migrations
 
             migrationBuilder.DropTable(
                 name: "TB_FilePaths");
+
+            migrationBuilder.DropTable(
+                name: "TB_Messages");
 
             migrationBuilder.DropTable(
                 name: "TB_OurBlogs");

@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-
-namespace ourStory.Controllers;
-[Route("[controller]")]
+﻿namespace OurStory.Controllers;
 [ApiController]
+[Route("[controller]")]
 [Authorize(Roles = "User, Admin")]
 public class Blogs : ControllerBase
 {
@@ -13,7 +11,7 @@ public class Blogs : ControllerBase
         _blogsService = blogsService;
     }
 
-    [HttpGet]
+    [HttpGet("GetAllBlogs")]
     public async Task<IActionResult> GetAllBlogs(int blogType = 0, int events = 0, int published = 0, int lover = 0)
     {
         var Blogs = await _blogsService.GetAll(blogType, events, published, lover);
@@ -42,7 +40,7 @@ public class Blogs : ControllerBase
 
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("GetBlogById/{id}")]
     public async Task<IActionResult> GetBlogById(int id)
     {
         var Blog = await _blogsService.GetById(id);

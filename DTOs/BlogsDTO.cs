@@ -1,4 +1,4 @@
-﻿namespace ourStory.DTOs;
+﻿namespace OurStory.DTOs;
 
 public class BlogsDTO
 {

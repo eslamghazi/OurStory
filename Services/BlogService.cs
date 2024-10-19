@@ -1,5 +1,5 @@
 ﻿
-namespace ourStory.Services;
+namespace OurStory.Services;
 
 public class BlogService : IBlogs
 {
@@ -145,15 +145,17 @@ public class BlogService : IBlogs
 
         await _DbContext.TB_OurBlogs.AddAsync(Blog);
 
-        try
-        {
-            await _DbContext.SaveChangesAsync();
-        }
-        catch (DbUpdateException ex)
-        {
-            var innerException = ex.InnerException?.Message;
-            throw new Exception($"Error while saving changes: {innerException ?? ex.Message}");
-        }
+        //try
+        //{
+        //    await _DbContext.SaveChangesAsync();
+        //}
+        //catch (DbUpdateException ex)
+        //{
+        //    var innerException = ex.InnerException?.Message;
+        //    throw new Exception($"Error while saving changes: {innerException ?? ex.Message}");
+        //}
+
+        await _DbContext.SaveChangesAsync();
 
         return Blog;
     }

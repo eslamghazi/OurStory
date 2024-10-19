@@ -1,9 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-
-namespace ourStory.Helpers; public class JwtHelper
+﻿namespace OurStory.Helpers;
+public class JwtHelper
 {
     private readonly IConfiguration _config;
 

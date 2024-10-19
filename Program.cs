@@ -1,14 +1,11 @@
 // Get WebApplicationBuilder.
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using ourStory.Helpers;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Get ConnectionString From appsettings.json.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddSignalR();
 
 // Use The Created DbContext That Inherit From "IdentityDbContext<ApplicationUser>".
 // Require Microsoft.EntityFrameworkCore and Microsoft.EntityFrameworkCore.SqlServer and Microsoft.EntityFrameworkCore.Tools packages.
@@ -52,6 +49,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+// Add Dependency Injection For Messages Service.
+builder.Services.AddTransient<IMessages, MessagesService>();
 
 // Add Dependency Injection For Blogs Service.
 builder.Services.AddTransient<IBlogs, BlogService>();

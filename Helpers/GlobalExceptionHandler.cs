@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.IdentityModel.Tokens;
-using System.Net;
-using System.Text.Json;
-
-namespace ourStory.Helpers
+﻿namespace OurStory.Helpers
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {

@@ -1,4 +1,4 @@
-﻿namespace ourStory.Models;
+﻿namespace OurStory.Models;
 
 public class ApplicationDbContext : DbContext
 {
@@ -40,6 +40,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<TB_Lovers> TB_Lovers { get; set; }
     public DbSet<TB_Descriptions> TB_Descriptions { get; set; }
+    public DbSet<TB_Messages> TB_Messages { get; set; }
     public DbSet<TB_Blogs> TB_OurBlogs { get; set; }
     public DbSet<TB_FilePaths> TB_FilePaths { get; set; }
     public DbSet<LK_BlogTypeLookup> LK_BlogTypeLookup { get; set; }

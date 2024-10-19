@@ -1,4 +1,4 @@
-﻿namespace ourStory.Services;
+﻿namespace OurStory.Services;
 
 public interface IBlogs
 {

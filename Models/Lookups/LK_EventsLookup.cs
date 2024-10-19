@@ -1,4 +1,4 @@
-﻿namespace ourStory.Models.Lookups;
+﻿namespace OurStory.Models.Lookups;
 
 public class LK_EventsLookup
 {

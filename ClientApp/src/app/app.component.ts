@@ -11,7 +11,7 @@ export class AppComponent implements AfterViewInit {
   constructor(private router: Router) {}
 
   ngAfterViewInit(): void {
-    const specificRoute = '/ourStory';
+    const specificRoute = '/OurStory';
     if (this.router.url.includes(specificRoute)) {
       // The specific route is part of the current URL
       this.showLayout = true;

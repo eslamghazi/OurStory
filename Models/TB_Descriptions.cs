@@ -1,4 +1,4 @@
-﻿namespace ourStory.Models;
+﻿namespace OurStory.Models;
 
 public class TB_Descriptions
 {

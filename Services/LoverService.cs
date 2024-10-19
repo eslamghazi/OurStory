@@ -1,4 +1,4 @@
-﻿namespace ourStory.Services;
+﻿namespace OurStory.Services;
 
 public class LoverService : ILovers
 {
@@ -38,13 +38,9 @@ public class LoverService : ILovers
         ExistsDescription.Description = DescriptionDTO.Description;
 
         if (DescriptionDTO.DateCreatedAt != null)
-        {
             ExistsDescription.DateCreatedAt = DescriptionDTO.DateCreatedAt.Value;
-        }
         else
-        {
             ExistsDescription.DateCreatedAt = DateTime.Now;
-        }
 
         _DbContext.TB_Descriptions.Update(ExistsDescription);
 
@@ -83,7 +79,7 @@ public class LoverService : ILovers
 
         if (Lover == null)
         {
-            throw new Exception($"Blog with ID {LoverDTO.Id} not found.");
+            throw new Exception($"Lover with ID {LoverDTO.Id} not found.");
         }
 
         // Handle file uploads
@@ -91,9 +87,9 @@ public class LoverService : ILovers
         {
             Lover.TB_FilesPath = await HandleFileUploadAsync<TB_Lovers, TB_FilePaths>(
                 LoverDTO.Files,
-                nameof(TB_Blogs),
+                nameof(TB_Lovers),
                 LoverDTO.Name ?? Lover.Name,
-                "Blogs",
+                "Lovers",
             Lover.TB_FilesPath,
                 _DbContext.TB_FilePaths,
                 item => new TB_FilePaths()
@@ -117,13 +113,9 @@ public class LoverService : ILovers
                 Description.Description = LoverDTO.Description.Description;
 
                 if (LoverDTO.Description.DateCreatedAt != null)
-                {
                     Description.DateCreatedAt = LoverDTO.Description.DateCreatedAt.Value;
-                }
                 else
-                {
                     Description.DateCreatedAt = DateTime.Now;
-                }
 
             }
             else
@@ -132,13 +124,10 @@ public class LoverService : ILovers
                 Description.Description = LoverDTO.Description.Description;
 
                 if (LoverDTO.Description.DateCreatedAt != null)
-                {
                     Description.DateCreatedAt = LoverDTO.Description.DateCreatedAt.Value;
-                }
                 else
-                {
                     Description.DateCreatedAt = DateTime.Now;
-                }
+
 
             }
 
@@ -176,7 +165,7 @@ public class LoverService : ILovers
     {
         if (files == null || !files.Any()) return existingFilePaths ?? new List<TFilePath>();
 
-        // Initialize the list if it's null (for first-time blog creation)
+        // Initialize the list if it's null (for first-time Lover creation)
         existingFilePaths ??= new List<TFilePath>();
 
         foreach (var item in files)

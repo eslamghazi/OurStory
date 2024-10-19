@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using ourStory.Helpers;
-
-namespace ourStory.Controllers;
-[Route("[controller]")]
+﻿namespace OurStory.Controllers;
 [ApiController]
+[Route("[controller]")]
 [Authorize(Roles = "User, Admin")]
 
 public class Lovers : ControllerBase
@@ -40,7 +37,7 @@ public class Lovers : ControllerBase
         return password == storedHash;
     }
 
-    [HttpGet]
+    [HttpGet("GetAllDescriptions")]
     public async Task<IActionResult> GetAllDescriptions(int loverId)
     {
 
@@ -50,8 +47,8 @@ public class Lovers : ControllerBase
         return Ok(Descriptions);
     }
 
-    [HttpPost(template: "UpdateDescription")]
-    public async Task<IActionResult> UpdateLover([FromForm] DescriptionsDTO DTO)
+    [HttpPost("UpdateDescription")]
+    public async Task<IActionResult> UpdateDescription([FromForm] DescriptionsDTO DTO)
     {
 
         var Description = await _LoverService.UpdateDescription(DTO);
@@ -62,7 +59,7 @@ public class Lovers : ControllerBase
         return Ok(Description);
     }
 
-    [HttpDelete(template: "DeleteDescription")]
+    [HttpDelete("DeleteDescription")]
     public async Task<IActionResult> DeleteDescription(int id)
     {
 
@@ -74,7 +71,7 @@ public class Lovers : ControllerBase
         return Ok(Description);
     }
 
-    [HttpPost(template: "UpdateLover")]
+    [HttpPost("UpdateLover")]
     public async Task<IActionResult> UpdateLover([FromForm] UpdateLoverDTO DTO, bool IsEditDescription = false)
     {
 
