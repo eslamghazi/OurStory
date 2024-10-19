@@ -28,7 +28,15 @@ public class Lovers : ControllerBase
 
         var token = _jwtHelper.GenerateJwtToken(user);
 
-        return Ok(new { Token = token });
+        var loggedUserInfo = new LoggedUserDTO
+        {
+            Username = user.Name,
+            Password = user.Password,
+            Role = user.Role,
+            Token = token,
+        };
+
+        return Ok(loggedUserInfo);
     }
 
     private bool VerifyPassword(string password, string storedHash)
