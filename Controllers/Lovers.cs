@@ -30,6 +30,7 @@ public class Lovers : ControllerBase
 
         var loggedUserInfo = new LoggedUserDTO
         {
+            Id = user.Id,
             Username = user.Name,
             Password = user.Password,
             Role = user.Role,
