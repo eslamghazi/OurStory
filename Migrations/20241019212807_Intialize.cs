@@ -1,4 +1,7 @@
-﻿#nullable disable
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
@@ -96,6 +99,8 @@ namespace OurStory.Migrations
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateCreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsMessageDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsSeen = table.Column<bool>(type: "bit", nullable: true),
+                    SeenAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ID_Lovers_Sender_TB = table.Column<int>(type: "int", nullable: true),
                     ID_Lovers_Receiver_TB = table.Column<int>(type: "int", nullable: true)
                 },
@@ -234,8 +239,8 @@ namespace OurStory.Migrations
                 columns: new[] { "Id", "DateCreatedAt", "Description", "ID_Blog_Type_LK", "ID_Events_LK", "ID_Lovers_TB", "ID_Published_LK", "ItsDate", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 10, 19, 13, 54, 18, 106, DateTimeKind.Local).AddTicks(2490), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
-                    { 2, new DateTime(2024, 10, 19, 13, 54, 18, 106, DateTimeKind.Local).AddTicks(2533), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
+                    { 1, new DateTime(2024, 10, 20, 0, 28, 5, 499, DateTimeKind.Local).AddTicks(516), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
+                    { 2, new DateTime(2024, 10, 20, 0, 28, 5, 499, DateTimeKind.Local).AddTicks(563), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
                 });
 
             migrationBuilder.CreateIndex(

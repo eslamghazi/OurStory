@@ -53,6 +53,22 @@ public class MessagesService : IMessages
         return message;
     }
 
+    public async Task<TB_Messages> MarkMessageAsSeenAsync(SeenMessageDTO seenMessageDTO)
+    {
+        var message = await _context.TB_Messages.FindAsync(seenMessageDTO.messageId);
+
+        if (message == null || message.ID_Lovers_Receiver_TB != seenMessageDTO.receiverId || message.IsSeen.Value)
+        {
+            throw new Exception("حدث خطأ اثناء قراءة الرساله");
+        }
+
+        message.IsSeen = true;
+        message.SeenAt = seenMessageDTO.SeenAt ?? DateTime.Now;
+        await _context.SaveChangesAsync();
+
+        return message;
+    }
+
     public async Task<TB_Messages> UpdateMessageAsync(MessageDTO messageDTO)
     {
         var message = await _context.TB_Messages.FindAsync(messageDTO.Id);

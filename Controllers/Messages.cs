@@ -52,6 +52,23 @@ public class MessagesController : ControllerBase
         return Ok(message);
     }
 
+    // New: Mark a message as seen
+    [HttpPost("MarkMessageAsSeen")]
+    public async Task<IActionResult> MarkMessageAsSeen(SeenMessageDTO seenMessageDTO)
+    {
+        var result = await _messageService.MarkMessageAsSeenAsync(seenMessageDTO);
+        if (result == null)
+        {
+            return NotFound(new { Message = "Message not found or user not authorized to mark it as seen." });
+        }
+
+        // Notify the sender that the message has been seen using SignalR
+        await _hubContext.Clients.User(result.ID_Lovers_Sender_TB.ToString())
+            .SendAsync("MessageSeen", new { seenMessageDTO.messageId, result.SeenAt });
+
+        return Ok(new { Message = "Message marked as seen.", SeenAt = result.SeenAt });
+    }
+
     [HttpPost("UpdateMessage")]
     public async Task<IActionResult> UpdateMessage([FromBody] MessageDTO messageDTO)
     {

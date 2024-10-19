@@ -15,3 +15,12 @@ public class MessageDTO
     public List<IFormFile>? Files { get; set; }
 
 }
+public class SeenMessageDTO
+{
+    public int? messageId { get; set; }
+
+    public int? receiverId { get; set; }
+
+    public DateTime? SeenAt { get; set; }
+
+}
