@@ -42,7 +42,7 @@ public class Lovers : ControllerBase
             ProfilePicture = user.TB_FilesPath_ProfilePicture
         };
 
-        return Ok(new { status = 200, Data = loggedUserInfo });
+        return Ok(new { StatusCode = 200, Data = loggedUserInfo });
     }
 
     private bool VerifyPassword(string password, string storedHash)
@@ -60,7 +60,7 @@ public class Lovers : ControllerBase
         if (Lovers == null)
             return BadRequest(new { Message = "لا يوجد مستخدمين او انه حدث خطأ ما!" });
 
-        return Ok(new { status = 200, Data = Lovers });
+        return Ok(new { StatusCode = 200, Data = Lovers });
     }
 
     [HttpGet("GetAllDescriptions/{loverId}")]
@@ -72,7 +72,7 @@ public class Lovers : ControllerBase
         if (Descriptions == null)
             return BadRequest(new { Message = "لا يوجد وصف او انه حدث خطأ ما!" });
 
-        return Ok(new { status = 200, Data = Descriptions });
+        return Ok(new { StatusCode = 200, Data = Descriptions });
     }
 
     [HttpPost("UpdateDescription")]
@@ -84,7 +84,7 @@ public class Lovers : ControllerBase
         if (Description == null)
             return BadRequest(new { Message = $"لا يمكن التعديل {DTO.Id} او انه حدث خطأ ما!" });
 
-        return Ok(new { status = 200, Data = Description });
+        return Ok(new { StatusCode = 200, Data = Description });
     }
 
     [HttpDelete("DeleteDescription/{id}")]
@@ -96,7 +96,7 @@ public class Lovers : ControllerBase
         if (Description == null)
             return BadRequest(new { Message = $"لا يمكن حذف {id} او انه حدث خطأ ما!" });
 
-        return Ok(new { status = 200, Data = Description });
+        return Ok(new { StatusCode = 200, Data = Description });
     }
 
     [HttpPost("UpdateLover")]
@@ -108,7 +108,7 @@ public class Lovers : ControllerBase
         if (Lover == null)
             return BadRequest(new { Message = $"لا يمكن التعديل {DTO.Name} او انه حدث خطأ ما!" });
 
-        return Ok(new { status = 200, Data = Lover });
+        return Ok(new { StatusCode = 200, Data = Lover });
     }
 
 }

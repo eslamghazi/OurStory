@@ -71,7 +71,7 @@ public class Blogs : ControllerBase
 
         };
 
-        return Ok(new { status = 200, Data = blogsDTO });
+        return Ok(new { StatusCode = 200, Data = blogsDTO });
 
     }
 
@@ -88,7 +88,7 @@ public class Blogs : ControllerBase
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
+        return Ok(new { StatusCode = 200, Data = new { Blog, LikesCount, CommentsCount } });
 
     }
 
@@ -105,7 +105,7 @@ public class Blogs : ControllerBase
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
+        return Ok(new { StatusCode = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpDelete("DeleteBlog/{id}")]
@@ -121,7 +121,7 @@ public class Blogs : ControllerBase
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
+        return Ok(new { StatusCode = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpDelete("DeleteFile/{id}")]
@@ -133,7 +133,7 @@ public class Blogs : ControllerBase
         if (File == null)
             return BadRequest(new { Message = "لا يمكن حذف الملف او انه حدث خطأ ما!" });
 
-        return Ok(new { status = 200, Data = new { File } });
+        return Ok(new { StatusCode = 200, Data = new { File } });
 
     }
 
@@ -150,7 +150,7 @@ public class Blogs : ControllerBase
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
+        return Ok(new { StatusCode = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpPost(template: "UpdateComment")]
@@ -166,7 +166,7 @@ public class Blogs : ControllerBase
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
+        return Ok(new { StatusCode = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpPost(template: "UpdateLike")]
@@ -182,7 +182,7 @@ public class Blogs : ControllerBase
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
+        return Ok(new { StatusCode = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpDelete(template: "DeleteComment")]
@@ -198,7 +198,7 @@ public class Blogs : ControllerBase
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
+        return Ok(new { StatusCode = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
 }

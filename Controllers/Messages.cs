@@ -41,7 +41,7 @@ public class MessagesController : ControllerBase
             .SendAsync("ReceiveMessages", messageDtos);
 
         // Return the messages as the HTTP response as well (optional)
-        return Ok(new { status = 200, Data = messageDtos });
+        return Ok(new { StatusCode = 200, Data = messageDtos });
     }
 
     [HttpPost("SendMessage")]
@@ -56,7 +56,7 @@ public class MessagesController : ControllerBase
         await _hubContext.Clients.User(messageDto.ReceiverId.ToString())
             .SendAsync("ReceiveMessage", messageDto);
 
-        return Ok(new { status = 200, Data = message });
+        return Ok(new { StatusCode = 200, Data = message });
     }
 
     // New: Mark a message as seen
@@ -74,7 +74,7 @@ public class MessagesController : ControllerBase
         await _hubContext.Clients.User(result.ID_Lovers_Sender_TB.ToString())
             .SendAsync("MessageSeen", new { seenMessageDTO.messageId, result.SeenAt });
 
-        return Ok(new { status = 200, Data = new { SeenAt = result.SeenAt } });
+        return Ok(new { StatusCode = 200, Data = new { SeenAt = result.SeenAt } });
 
     }
 
@@ -87,7 +87,7 @@ public class MessagesController : ControllerBase
             return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
         }
 
-        return Ok(new { status = 200, Data = updatedMessage });
+        return Ok(new { StatusCode = 200, Data = updatedMessage });
     }
 
     [HttpDelete("DeleteMessage/{messageId}")]
@@ -99,7 +99,7 @@ public class MessagesController : ControllerBase
             return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
         }
 
-        return Ok(new { status = 200, Message = "تم حذف الرساله بنجاح" });
+        return Ok(new { StatusCode = 200, Message = "تم حذف الرساله بنجاح" });
     }
 
 }
