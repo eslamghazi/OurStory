@@ -22,7 +22,7 @@ public class MessagesController : ControllerBase
         var messages = await _messageService.GetMessagesBetweenUsers(userId1, userId2);
 
         if (messages == null)
-            return BadRequest(new { Message = "لا يوجد رسائل او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يوجد رسائل او انه حدث خطأ ما!" });
 
         // Convert messages to DTOs (if needed) to send them via SignalR
         var messageDtos = messages.Select(m => new MessageDTO
@@ -51,7 +51,7 @@ public class MessagesController : ControllerBase
         var message = await _messageService.SendMessageAsync(messageDto);
 
         if (message == null)
-            return BadRequest(new { Message = "حدث خطأ اثناء ارسال الرساله!" });
+            return BadRequest(new { StatusCode = 500, Message = "حدث خطأ اثناء ارسال الرساله!" });
 
         await _hubContext.Clients.User(messageDto.ReceiverId.ToString())
             .SendAsync("ReceiveMessage", messageDto);
@@ -64,11 +64,10 @@ public class MessagesController : ControllerBase
     public async Task<IActionResult> MarkMessageAsSeen(SeenMessageDTO seenMessageDTO)
     {
         var result = await _messageService.MarkMessageAsSeenAsync(seenMessageDTO);
-        if (result == null)
-        {
-            return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
 
-        }
+        if (result == null)
+            return BadRequest(new { StatusCode = 500, Message = "لا توجد رساله انو انه حدث خطأ ما!" });
+
 
         // Notify the sender that the message has been seen using SignalR
         await _hubContext.Clients.User(result.ID_Lovers_Sender_TB.ToString())
@@ -83,9 +82,7 @@ public class MessagesController : ControllerBase
     {
         var updatedMessage = await _messageService.UpdateMessageAsync(messageDTO);
         if (updatedMessage == null)
-        {
-            return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
-        }
+            return BadRequest(new { StatusCode = 500, Message = "لا توجد رساله انو انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Data = updatedMessage });
     }
@@ -94,10 +91,9 @@ public class MessagesController : ControllerBase
     public async Task<IActionResult> DeleteMessage(int messageId)
     {
         var success = await _messageService.DeleteMessageAsync(messageId);
+
         if (!success)
-        {
-            return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
-        }
+            return BadRequest(new { StatusCode = 500, Message = "لا توجد رساله انو انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Message = "تم حذف الرساله بنجاح" });
     }

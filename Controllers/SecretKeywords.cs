@@ -17,7 +17,7 @@ public class SecretKeywords : ControllerBase
         var SecretKeywords = await _SecretKeywordsService.GetAllSecretKeywords();
 
         if (!SecretKeywords.Any())
-            return BadRequest(new { Message = "لا توجد secret keywords انو انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا توجد secret keywords انو انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Data = SecretKeywords });
     }
@@ -29,7 +29,7 @@ public class SecretKeywords : ControllerBase
         var SecretKeyword = await _SecretKeywordsService.AddSecretKeyword(SecretKeywordDTO);
 
         if (SecretKeyword == null)
-            return BadRequest(new { Message = "لا يمكن اضافة secret keyword!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن اضافة secret keyword!" });
 
         return Ok(new { StatusCode = 200, Data = SecretKeyword });
 
@@ -42,7 +42,7 @@ public class SecretKeywords : ControllerBase
         var SecretKeyword = await _SecretKeywordsService.EditSecretKeyword(SecretKeywordDTO);
 
         if (SecretKeyword == null)
-            return BadRequest(new { Message = "لا يمكن التعديل علي secret keyword!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن التعديل علي secret keyword!" });
 
         return Ok(new { StatusCode = 200, Data = SecretKeyword });
 
@@ -55,7 +55,7 @@ public class SecretKeywords : ControllerBase
         var SecretKeyword = await _SecretKeywordsService.DeleteSecretKeyword(id);
 
         if (SecretKeyword == null)
-            return BadRequest(new { Message = "لا يمكن حذف secret keyword!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن حذف secret keyword!" });
 
         return Ok(new { StatusCode = 200, Data = SecretKeyword });
 

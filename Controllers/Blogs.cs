@@ -17,7 +17,7 @@ public class Blogs : ControllerBase
         var Blogs = await _blogsService.GetAll(blogType, events, published, lover);
 
         if (!Blogs.Any())
-            return BadRequest(new { Message = "لا توجد مدونات او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا توجد مدونات او انه حدث خطأ ما!" });
 
         List<BlogsDTO> blogsDTO = new List<BlogsDTO>();
 
@@ -50,7 +50,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.GetById(id);
 
         if (Blog == null)
-            return BadRequest(new { Message = "لا توجد مدونه بهذا الرقم او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا توجد مدونه بهذا الرقم او انه حدث خطأ ما!" });
 
         BlogsDTO blogsDTO = new BlogsDTO()
         {
@@ -82,7 +82,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.AddAsync(DTO);
 
         if (Blog == null)
-            return BadRequest(new { Message = "لا يمكن إضافة المدونة او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن إضافة المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
@@ -99,7 +99,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.UpdateAsync(DTO);
 
         if (Blog == null)
-            return BadRequest(new { Message = "لا يمكن تعديل المدونة او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن تعديل المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
@@ -115,7 +115,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.DeleteAsync(id);
 
         if (Blog == null)
-            return BadRequest(new { Message = "لا يمكن حذف المدونة او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن حذف المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
@@ -131,7 +131,7 @@ public class Blogs : ControllerBase
         var File = await _blogsService.DeleteFile(id);
 
         if (File == null)
-            return BadRequest(new { Message = "لا يمكن حذف الملف او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن حذف الملف او انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Data = new { File } });
 
@@ -144,7 +144,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.AddCommentBlogAsync(DTO);
 
         if (Blog == null)
-            return BadRequest(new { Message = "لا يمكن اضافة تعليف علي المدونة او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن اضافة تعليف علي المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
@@ -160,7 +160,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.UpdateCommentBlogAsync(DTO);
 
         if (Blog == null)
-            return BadRequest(new { Message = "لا يمكن تعديل التعليف علي المدونة او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن تعديل التعليف علي المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
@@ -176,7 +176,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.UpdateLikeBlogAsync(DTO);
 
         if (Blog == null)
-            return BadRequest(new { Message = "لا يمكن تعديل الاعجاب علي المدونة او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن تعديل الاعجاب علي المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
@@ -192,7 +192,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.DeleteCommentBlogAsync(CommentBlogDTO);
 
         if (Blog == null)
-            return BadRequest(new { Message = "لا يمكن حذف التعليق من المدونة او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يمكن حذف التعليق من المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 

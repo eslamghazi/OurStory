@@ -25,10 +25,7 @@ public class Lovers : ControllerBase
             .FirstOrDefaultAsync(u => u.Name == loginRequest.Username);
 
         if (user == null || !VerifyPassword(loginRequest.Password, user.Password))
-        {
-
-            return BadRequest(new { Message = "اسم المستخدم او كلمة السر خطأ" });
-        }
+            return BadRequest(new { StatusCode = 500, Message = "اسم المستخدم او كلمة السر خطأ" });
 
         var token = _jwtHelper.GenerateJwtToken(user);
 
@@ -58,7 +55,7 @@ public class Lovers : ControllerBase
         var Lovers = await _LoverService.GetAllLovers();
 
         if (Lovers == null)
-            return BadRequest(new { Message = "لا يوجد مستخدمين او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يوجد مستخدمين او انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Data = Lovers });
     }
@@ -70,7 +67,7 @@ public class Lovers : ControllerBase
         var Descriptions = await _LoverService.getAllDescriptions(loverId);
 
         if (Descriptions == null)
-            return BadRequest(new { Message = "لا يوجد وصف او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = "لا يوجد وصف او انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Data = Descriptions });
     }
@@ -82,7 +79,7 @@ public class Lovers : ControllerBase
         var Description = await _LoverService.UpdateDescription(DTO);
 
         if (Description == null)
-            return BadRequest(new { Message = $"لا يمكن التعديل {DTO.Id} او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = $"لا يمكن التعديل {DTO.Id} او انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Data = Description });
     }
@@ -94,7 +91,7 @@ public class Lovers : ControllerBase
         var Description = await _LoverService.DeleteDescription(id);
 
         if (Description == null)
-            return BadRequest(new { Message = $"لا يمكن حذف {id} او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = $"لا يمكن حذف {id} او انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Data = Description });
     }
@@ -106,7 +103,7 @@ public class Lovers : ControllerBase
         var Lover = await _LoverService.UpdateLover(DTO, IsEditDescription);
 
         if (Lover == null)
-            return BadRequest(new { Message = $"لا يمكن التعديل {DTO.Name} او انه حدث خطأ ما!" });
+            return BadRequest(new { StatusCode = 500, Message = $"لا يمكن التعديل {DTO.Name} او انه حدث خطأ ما!" });
 
         return Ok(new { StatusCode = 200, Data = Lover });
     }
