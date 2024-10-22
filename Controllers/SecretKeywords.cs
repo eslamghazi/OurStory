@@ -17,9 +17,9 @@ public class SecretKeywords : ControllerBase
         var SecretKeywords = await _SecretKeywordsService.GetAllSecretKeywords();
 
         if (!SecretKeywords.Any())
-            throw new Exception("No Secret Keywords");
+            return BadRequest(new { Message = "لا توجد secret keywords انو انه حدث خطأ ما!" });
 
-        return Ok(SecretKeywords);
+        return Ok(new { StatusCode = 200, Data = SecretKeywords });
     }
 
     [Authorize(Roles = "Admin")]
@@ -29,9 +29,10 @@ public class SecretKeywords : ControllerBase
         var SecretKeyword = await _SecretKeywordsService.AddSecretKeyword(SecretKeywordDTO);
 
         if (SecretKeyword == null)
-            throw new Exception("Cannot Add SecretKeyword");
+            return BadRequest(new { Message = "لا يمكن اضافة secret keyword!" });
 
-        return Ok(SecretKeyword);
+        return Ok(new { StatusCode = 200, Data = SecretKeyword });
+
     }
 
     [Authorize(Roles = "Admin")]
@@ -41,9 +42,10 @@ public class SecretKeywords : ControllerBase
         var SecretKeyword = await _SecretKeywordsService.EditSecretKeyword(SecretKeywordDTO);
 
         if (SecretKeyword == null)
-            throw new Exception("Cannot Edit SecretKeyword");
+            return BadRequest(new { Message = "لا يمكن التعديل علي secret keyword!" });
 
-        return Ok(SecretKeyword);
+        return Ok(new { StatusCode = 200, Data = SecretKeyword });
+
     }
 
     [Authorize(Roles = "Admin")]
@@ -53,9 +55,10 @@ public class SecretKeywords : ControllerBase
         var SecretKeyword = await _SecretKeywordsService.DeleteSecretKeyword(id);
 
         if (SecretKeyword == null)
-            throw new Exception("Cannot Delete SecretKeyword");
+            return BadRequest(new { Message = "لا يمكن حذف secret keyword!" });
 
-        return Ok(SecretKeyword);
+        return Ok(new { StatusCode = 200, Data = SecretKeyword });
+
     }
 }
 

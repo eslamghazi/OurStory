@@ -26,7 +26,8 @@ public class Lovers : ControllerBase
 
         if (user == null || !VerifyPassword(loginRequest.Password, user.Password))
         {
-            return Unauthorized("Invalid username or password");
+
+            return BadRequest(new { Message = "اسم المستخدم او كلمة السر خطأ" });
         }
 
         var token = _jwtHelper.GenerateJwtToken(user);
@@ -41,7 +42,7 @@ public class Lovers : ControllerBase
             ProfilePicture = user.TB_FilesPath_ProfilePicture
         };
 
-        return Ok(loggedUserInfo);
+        return Ok(new { status = 200, Data = loggedUserInfo });
     }
 
     private bool VerifyPassword(string password, string storedHash)
@@ -56,8 +57,10 @@ public class Lovers : ControllerBase
 
         var Lovers = await _LoverService.GetAllLovers();
 
+        if (Lovers == null)
+            return BadRequest(new { Message = "لا يوجد مستخدمين او انه حدث خطأ ما!" });
 
-        return Ok(Lovers);
+        return Ok(new { status = 200, Data = Lovers });
     }
 
     [HttpGet("GetAllDescriptions/{loverId}")]
@@ -66,8 +69,10 @@ public class Lovers : ControllerBase
 
         var Descriptions = await _LoverService.getAllDescriptions(loverId);
 
+        if (Descriptions == null)
+            return BadRequest(new { Message = "لا يوجد وصف او انه حدث خطأ ما!" });
 
-        return Ok(Descriptions);
+        return Ok(new { status = 200, Data = Descriptions });
     }
 
     [HttpPost("UpdateDescription")]
@@ -77,9 +82,9 @@ public class Lovers : ControllerBase
         var Description = await _LoverService.UpdateDescription(DTO);
 
         if (Description == null)
-            throw new Exception($"لا يمكن التعديل {DTO.Id}");
+            return BadRequest(new { Message = $"لا يمكن التعديل {DTO.Id} او انه حدث خطأ ما!" });
 
-        return Ok(Description);
+        return Ok(new { status = 200, Data = Description });
     }
 
     [HttpDelete("DeleteDescription/{id}")]
@@ -89,9 +94,9 @@ public class Lovers : ControllerBase
         var Description = await _LoverService.DeleteDescription(id);
 
         if (Description == null)
-            throw new Exception($"لا يمكن حذف {id}");
+            return BadRequest(new { Message = $"لا يمكن حذف {id} او انه حدث خطأ ما!" });
 
-        return Ok(Description);
+        return Ok(new { status = 200, Data = Description });
     }
 
     [HttpPost("UpdateLover")]
@@ -101,9 +106,9 @@ public class Lovers : ControllerBase
         var Lover = await _LoverService.UpdateLover(DTO, IsEditDescription);
 
         if (Lover == null)
-            throw new Exception($"لا يمكن التعديل {DTO.Name}");
+            return BadRequest(new { Message = $"لا يمكن التعديل {DTO.Name} او انه حدث خطأ ما!" });
 
-        return Ok(Lover);
+        return Ok(new { status = 200, Data = Lover });
     }
 
 }

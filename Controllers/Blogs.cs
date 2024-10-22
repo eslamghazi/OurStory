@@ -17,7 +17,7 @@ public class Blogs : ControllerBase
         var Blogs = await _blogsService.GetAll(blogType, events, published, lover);
 
         if (!Blogs.Any())
-            throw new Exception("لا توجد مدونات");
+            return BadRequest(new { Message = "لا توجد مدونات او انه حدث خطأ ما!" });
 
         List<BlogsDTO> blogsDTO = new List<BlogsDTO>();
 
@@ -40,7 +40,7 @@ public class Blogs : ControllerBase
         }).ToList();
 
 
-        return Ok(new { status = 200, Data = blogsDTO });
+        return Ok(new { StatusCode = 200, Data = blogsDTO });
 
     }
 
@@ -50,7 +50,7 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.GetById(id);
 
         if (Blog == null)
-            throw new Exception("لا توجد مدونه بهذا الرقم");
+            return BadRequest(new { Message = "لا توجد مدونه بهذا الرقم او انه حدث خطأ ما!" });
 
         BlogsDTO blogsDTO = new BlogsDTO()
         {
@@ -82,13 +82,14 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.AddAsync(DTO);
 
         if (Blog == null)
-            throw new Exception("لا يمكن إضافة المدونة");
+            return BadRequest(new { Message = "لا يمكن إضافة المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { Blog, LikesCount, CommentsCount });
+        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
+
     }
 
     [HttpPost(template: "UpdateBlog")]
@@ -98,13 +99,13 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.UpdateAsync(DTO);
 
         if (Blog == null)
-            throw new Exception("لا يمكن تعديل المدونة");
+            return BadRequest(new { Message = "لا يمكن تعديل المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { Blog, LikesCount, CommentsCount });
+        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpDelete("DeleteBlog/{id}")]
@@ -114,13 +115,13 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.DeleteAsync(id);
 
         if (Blog == null)
-            throw new Exception("لا يمكن حذف المدونة");
+            return BadRequest(new { Message = "لا يمكن حذف المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { Blog, LikesCount, CommentsCount });
+        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpDelete("DeleteFile/{id}")]
@@ -130,9 +131,10 @@ public class Blogs : ControllerBase
         var File = await _blogsService.DeleteFile(id);
 
         if (File == null)
-            throw new Exception("لا يمكن حذف الملف");
+            return BadRequest(new { Message = "لا يمكن حذف الملف او انه حدث خطأ ما!" });
 
-        return Ok(File);
+        return Ok(new { status = 200, Data = new { File } });
+
     }
 
     [HttpPost(template: "AddComment")]
@@ -142,13 +144,13 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.AddCommentBlogAsync(DTO);
 
         if (Blog == null)
-            throw new Exception("لا يمكن اضافة تعليف علي المدونة");
+            return BadRequest(new { Message = "لا يمكن اضافة تعليف علي المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { Blog, LikesCount, CommentsCount });
+        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpPost(template: "UpdateComment")]
@@ -158,13 +160,13 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.UpdateCommentBlogAsync(DTO);
 
         if (Blog == null)
-            throw new Exception("لا يمكن تعديل التعليف علي المدونة");
+            return BadRequest(new { Message = "لا يمكن تعديل التعليف علي المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { Blog, LikesCount, CommentsCount });
+        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpPost(template: "UpdateLike")]
@@ -174,13 +176,13 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.UpdateLikeBlogAsync(DTO);
 
         if (Blog == null)
-            throw new Exception("لا يمكن تعديل الاعجاب علي المدونة");
+            return BadRequest(new { Message = "لا يمكن تعديل الاعجاب علي المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { Blog, LikesCount, CommentsCount });
+        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
     [HttpDelete(template: "DeleteComment")]
@@ -190,13 +192,13 @@ public class Blogs : ControllerBase
         var Blog = await _blogsService.DeleteCommentBlogAsync(CommentBlogDTO);
 
         if (Blog == null)
-            throw new Exception("لا يمكن حذف التعليق من المدونة");
+            return BadRequest(new { Message = "لا يمكن حذف التعليق من المدونة او انه حدث خطأ ما!" });
 
         var CommentsCount = Blog.TB_Comments.Count();
 
         var LikesCount = Blog.TB_Likes.Count();
 
-        return Ok(new { Blog, LikesCount, CommentsCount });
+        return Ok(new { status = 200, Data = new { Blog, LikesCount, CommentsCount } });
     }
 
 }

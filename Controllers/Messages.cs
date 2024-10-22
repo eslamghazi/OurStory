@@ -21,6 +21,9 @@ public class MessagesController : ControllerBase
         // Fetch the messages between the two users
         var messages = await _messageService.GetMessagesBetweenUsers(userId1, userId2);
 
+        if (messages == null)
+            return BadRequest(new { Message = "لا يوجد رسائل او انه حدث خطأ ما!" });
+
         // Convert messages to DTOs (if needed) to send them via SignalR
         var messageDtos = messages.Select(m => new MessageDTO
         {
@@ -38,7 +41,7 @@ public class MessagesController : ControllerBase
             .SendAsync("ReceiveMessages", messageDtos);
 
         // Return the messages as the HTTP response as well (optional)
-        return Ok(messages);
+        return Ok(new { status = 200, Data = messageDtos });
     }
 
     [HttpPost("SendMessage")]
@@ -46,10 +49,14 @@ public class MessagesController : ControllerBase
     {
 
         var message = await _messageService.SendMessageAsync(messageDto);
+
+        if (message == null)
+            return BadRequest(new { Message = "حدث خطأ اثناء ارسال الرساله!" });
+
         await _hubContext.Clients.User(messageDto.ReceiverId.ToString())
             .SendAsync("ReceiveMessage", messageDto);
 
-        return Ok(message);
+        return Ok(new { status = 200, Data = message });
     }
 
     // New: Mark a message as seen
@@ -59,14 +66,16 @@ public class MessagesController : ControllerBase
         var result = await _messageService.MarkMessageAsSeenAsync(seenMessageDTO);
         if (result == null)
         {
-            return NotFound(new { Message = "Message not found or user not authorized to mark it as seen." });
+            return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
+
         }
 
         // Notify the sender that the message has been seen using SignalR
         await _hubContext.Clients.User(result.ID_Lovers_Sender_TB.ToString())
             .SendAsync("MessageSeen", new { seenMessageDTO.messageId, result.SeenAt });
 
-        return Ok(new { Message = "Message marked as seen.", SeenAt = result.SeenAt });
+        return Ok(new { status = 200, Data = new { Message = "Message marked as seen.", SeenAt = result.SeenAt } });
+
     }
 
     [HttpPost("UpdateMessage")]
@@ -75,10 +84,10 @@ public class MessagesController : ControllerBase
         var updatedMessage = await _messageService.UpdateMessageAsync(messageDTO);
         if (updatedMessage == null)
         {
-            return NotFound();
+            return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
         }
 
-        return Ok(updatedMessage);
+        return Ok(new { status = 200, Data = updatedMessage });
     }
 
     [HttpDelete("DeleteMessage/{messageId}")]
@@ -87,10 +96,10 @@ public class MessagesController : ControllerBase
         var success = await _messageService.DeleteMessageAsync(messageId);
         if (!success)
         {
-            return NotFound();
+            return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
         }
 
-        return NoContent();
+        return Ok(new { status = 200, Data = "Message Has Been Deleted" });
     }
 
 }

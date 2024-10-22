@@ -24,7 +24,8 @@ export class LoginComponent implements OnInit {
 
     this.authService.Login(model).subscribe((result) => {
       if (!result || !result.token) return;
-      localStorage.setItem("token", result.token)
+      localStorage.setItem(`userInfo`, JSON.stringify(result))
+      localStorage.removeItem(`firstTimePass`)
       this.router.navigateByUrl('/ourStory');
     })
   }

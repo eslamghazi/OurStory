@@ -9,6 +9,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from './shared/shared.module';
 import { LoginComponent } from './auth/login/login.component';
 import { LayoutModule } from './dashboard/layout/layout.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -18,6 +19,7 @@ import { LayoutModule } from './dashboard/layout/layout.module';
     BrowserAnimationsModule,
     SharedModule,
     LayoutModule,
+    CoreModule,
     HttpClientModule,
     NgxSpinnerModule.forRoot({ type: 'timer' }),
   ],
