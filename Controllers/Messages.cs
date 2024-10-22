@@ -74,7 +74,7 @@ public class MessagesController : ControllerBase
         await _hubContext.Clients.User(result.ID_Lovers_Sender_TB.ToString())
             .SendAsync("MessageSeen", new { seenMessageDTO.messageId, result.SeenAt });
 
-        return Ok(new { status = 200, Data = new { Message = "Message marked as seen.", SeenAt = result.SeenAt } });
+        return Ok(new { status = 200, Data = new { SeenAt = result.SeenAt } });
 
     }
 
@@ -99,7 +99,7 @@ public class MessagesController : ControllerBase
             return BadRequest(new { Message = "لا توجد رساله انو انه حدث خطأ ما!" });
         }
 
-        return Ok(new { status = 200, Data = "Message Has Been Deleted" });
+        return Ok(new { status = 200, Message = "تم حذف الرساله بنجاح" });
     }
 
 }
