@@ -1,16 +1,22 @@
 <div class="container text-center">
-  <form class="form-signin">
-    <img class="mb-4" src="assets/images/love.svg" alt="" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Enter Password</h1>
+  <form class="form-signin" (submit)="false">
+    <img class="mb-4" src="assets/images/love.svg" alt="" width="100" height="100">
+    <h1 class="h3 mb-3 font-weight-normal">Enter Username</h1>
+    <label for="inputUsername" class="sr-only">Username</label>
+    <input type="text" #UsernameInput id="inputUsername" class="form-control my-2" placeholder="Username"
+      required="true" autocompleteorg="null" autocomplete="off">
+
+    <h1 class="h3 mb-3 mt-5 font-weight-normal">Enter Password</h1>
     <label for="inputPassword" class="sr-only">Password</label>
-    <input type="text" id="inputPassword" class="form-control my-2" placeholder="Password" required=""
-      unmaskpasswordflag="1" autocompleteorg="null" autocomplete="off">
+    <input type="text" #passwordInput id="inputPassword" class="form-control my-2" placeholder="Password"
+      required="true" unmaskpasswordflag="1" autocompleteorg="null" autocomplete="off">
     <!-- <div class="checkbox mb-3">
       <label>
         <input type="checkbox" value="remember-me"> Remember me
       </label>
     </div> -->
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">© 2023-{{CurrentYear}}</p>
+    <button class="btn btn-lg btn-primary btn-block" (click)="signIn(UsernameInput.value, passwordInput.value)">Sign
+      in</button>
+    <p class="mt-5 mb-3 h5 text-muted">© {{previousYear}} - {{currentYear}}</p>
   </form>
 </div>

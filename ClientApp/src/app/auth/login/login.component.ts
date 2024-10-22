@@ -6,9 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  CurrentYear = new Date().getFullYear();
+  currentYear = new Date().getFullYear();
+  previousYear = new Date().getFullYear() - 1;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
+
+  signIn(username: string, password: string) {
+  }
 }

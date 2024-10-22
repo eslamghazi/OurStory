@@ -12,7 +12,7 @@ using OurStory.Models;
 namespace OurStory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241022030207_Intialize")]
+    [Migration("20241022061043_Intialize")]
     partial class Intialize
     {
         /// <inheritdoc />
@@ -266,7 +266,7 @@ namespace OurStory.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreatedAt = new DateTime(2024, 10, 22, 6, 2, 5, 397, DateTimeKind.Local).AddTicks(2536),
+                            DateCreatedAt = new DateTime(2024, 10, 22, 9, 10, 41, 727, DateTimeKind.Local).AddTicks(2682),
                             Description = "aaaaaaaaaaaa",
                             ID_Blog_Type_LK = 1,
                             ID_Events_LK = 1,
@@ -277,7 +277,7 @@ namespace OurStory.Migrations
                         new
                         {
                             Id = 2,
-                            DateCreatedAt = new DateTime(2024, 10, 22, 6, 2, 5, 397, DateTimeKind.Local).AddTicks(2615),
+                            DateCreatedAt = new DateTime(2024, 10, 22, 9, 10, 41, 727, DateTimeKind.Local).AddTicks(2736),
                             Description = "bbbbbbbbbbbb",
                             ID_Blog_Type_LK = 1,
                             ID_Events_LK = 1,
@@ -516,6 +516,35 @@ namespace OurStory.Migrations
                     b.HasIndex("ID_Lovers_Sender_TB");
 
                     b.ToTable("TB_Messages");
+                });
+
+            modelBuilder.Entity("OurStory.Models.TB_SecretKeywords", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Keyword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TB_SecretKeywords");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Keyword = "MabascotaStolenMaHeart",
+                            Title = "firstTimePass"
+                        });
                 });
 
             modelBuilder.Entity("OurStory.Models.TB_Blogs", b =>

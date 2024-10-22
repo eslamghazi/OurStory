@@ -4,7 +4,7 @@
 [Authorize(Roles = "User, Admin")]
 public class Blogs : ControllerBase
 {
-    private IBlogs _blogsService;
+    private readonly IBlogs _blogsService;
 
     public Blogs(IBlogs blogsService)
     {

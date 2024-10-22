@@ -41,6 +41,9 @@ public class ApplicationDbContext : DbContext
     new TB_Blogs { Id = 1, Title = "aa", Description = "aaaaaaaaaaaa", ID_Blog_Type_LK = 1, ID_Events_LK = 1, ID_Published_LK = 1, DateCreatedAt = DateTime.Now, ID_Lovers_TB = 1 },
     new TB_Blogs { Id = 2, Title = "bb", Description = "bbbbbbbbbbbb", ID_Blog_Type_LK = 1, ID_Events_LK = 1, ID_Published_LK = 1, DateCreatedAt = DateTime.Now, ID_Lovers_TB = 1 });
 
+        modelBuilder.Entity<TB_SecretKeywords>().HasData(
+    new TB_SecretKeywords { Id = 1, Title = "firstTimePass", Keyword = "MabascotaStolenMaHeart" });
+
     }
 
     public DbSet<TB_Lovers> TB_Lovers { get; set; }
@@ -50,6 +53,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<TB_Likes> TB_Likes { get; set; }
     public DbSet<TB_Comments> TB_Comments { get; set; }
     public DbSet<TB_FilePaths> TB_FilePaths { get; set; }
+    public DbSet<TB_SecretKeywords> TB_SecretKeywords { get; set; }
     public DbSet<LK_BlogTypeLookup> LK_BlogTypeLookup { get; set; }
     public DbSet<LK_EventsLookup> LK_EventsLookup { get; set; }
     public DbSet<LK_PublishedLookup> LK_PublishedLookup { get; set; }

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements AfterViewInit {
   showLayout = false;
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngAfterViewInit(): void {
     const specificRoute = '/OurStory';
@@ -19,6 +19,5 @@ export class AppComponent implements AfterViewInit {
       // The specific route is not part of the current URL
       this.showLayout = false;
     }
-    debugger;
   }
 }

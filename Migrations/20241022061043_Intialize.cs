@@ -70,6 +70,20 @@ namespace OurStory.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TB_SecretKeywords",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Keyword = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TB_SecretKeywords", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TB_Comments",
                 columns: table => new
                 {
@@ -290,12 +304,17 @@ namespace OurStory.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "TB_SecretKeywords",
+                columns: new[] { "Id", "Keyword", "Title" },
+                values: new object[] { 1, "MabascotaStolenMaHeart", "firstTimePass" });
+
+            migrationBuilder.InsertData(
                 table: "TB_OurBlogs",
                 columns: new[] { "Id", "DateCreatedAt", "Description", "ID_Blog_Type_LK", "ID_Events_LK", "ID_Lovers_TB", "ID_Published_LK", "ItsDate", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 10, 22, 6, 2, 5, 397, DateTimeKind.Local).AddTicks(2536), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
-                    { 2, new DateTime(2024, 10, 22, 6, 2, 5, 397, DateTimeKind.Local).AddTicks(2615), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
+                    { 1, new DateTime(2024, 10, 22, 9, 10, 41, 727, DateTimeKind.Local).AddTicks(2682), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
+                    { 2, new DateTime(2024, 10, 22, 9, 10, 41, 727, DateTimeKind.Local).AddTicks(2736), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -448,6 +467,9 @@ namespace OurStory.Migrations
 
             migrationBuilder.DropTable(
                 name: "TB_Likes");
+
+            migrationBuilder.DropTable(
+                name: "TB_SecretKeywords");
 
             migrationBuilder.DropTable(
                 name: "LK_LikesTypes");
