@@ -15,11 +15,11 @@ public class MessagesController : ControllerBase
         _hubContext = hubContext;
     }
 
-    [HttpGet("GetAllMessages/{userId1}/{userId2}")]
-    public async Task<IActionResult> GetAllMessages(int userId1, int userId2)
+    [HttpGet("GetAllMessages/{SenderId}/{ReceiverId}")]
+    public async Task<IActionResult> GetAllMessages(int SenderId, int ReceiverId)
     {
         // Fetch the messages between the two users
-        var messages = await _messageService.GetMessagesBetweenUsers(userId1, userId2);
+        var messages = await _messageService.GetMessagesBetweenUsers(SenderId, ReceiverId);
 
         if (messages == null)
             return BadRequest(new { StatusCode = 500, Message = "لا يوجد رسائل او انه حدث خطأ ما!" });
@@ -37,7 +37,7 @@ public class MessagesController : ControllerBase
         }).ToList();
 
         // Send the message history to both users in real-time via SignalR
-        await _hubContext.Clients.Users(userId1.ToString(), userId2.ToString())
+        await _hubContext.Clients.Users(SenderId.ToString(), ReceiverId.ToString())
             .SendAsync("ReceiveMessages", messageDtos);
 
         // Return the messages as the HTTP response as well (optional)

@@ -12,11 +12,11 @@ public class MessagesService : IMessages
     }
 
     // Fetch all non-deleted messages through SignalR
-    public async Task<IEnumerable<TB_Messages>> GetMessagesBetweenUsers(int userId1, int userId2)
+    public async Task<IEnumerable<TB_Messages>> GetMessagesBetweenUsers(int SenderId, int ReceiverId)
     {
         return await _context.TB_Messages
-            .Where(m => ((m.ID_Lovers_Sender_TB == userId1 && m.ID_Lovers_Receiver_TB == userId2) ||
-                         (m.ID_Lovers_Sender_TB == userId2 && m.ID_Lovers_Receiver_TB == userId1)))
+            .Where(m => ((m.ID_Lovers_Sender_TB == SenderId && m.ID_Lovers_Receiver_TB == ReceiverId) ||
+                         (m.ID_Lovers_Sender_TB == SenderId && m.ID_Lovers_Receiver_TB == ReceiverId)))
             .Include(x => x.TB_FilesPath)
             .OrderBy(m => m.DateCreatedAt)
             .ToListAsync();
