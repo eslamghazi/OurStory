@@ -313,8 +313,8 @@ namespace OurStory.Migrations
                 columns: new[] { "Id", "DateCreatedAt", "Description", "ID_Blog_Type_LK", "ID_Events_LK", "ID_Lovers_TB", "ID_Published_LK", "ItsDate", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 10, 22, 9, 10, 41, 727, DateTimeKind.Local).AddTicks(2682), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
-                    { 2, new DateTime(2024, 10, 22, 9, 10, 41, 727, DateTimeKind.Local).AddTicks(2736), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
+                    { 1, new DateTime(2024, 10, 22, 10, 32, 0, 882, DateTimeKind.Local).AddTicks(7995), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
+                    { 2, new DateTime(2024, 10, 22, 10, 32, 0, 882, DateTimeKind.Local).AddTicks(8042), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
                 });
 
             migrationBuilder.CreateIndex(

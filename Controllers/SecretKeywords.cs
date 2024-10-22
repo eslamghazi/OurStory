@@ -1,17 +1,16 @@
 ﻿namespace OurStory.Controllers;
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = "Admin")]
 public class SecretKeywords : ControllerBase
 {
     private readonly ISecretKeywords _SecretKeywordsService;
 
     public SecretKeywords(ISecretKeywords SecretKeywordsService)
     {
-        SecretKeywordsService = _SecretKeywordsService;
+        _SecretKeywordsService = SecretKeywordsService;
     }
 
-    [Authorize(Roles = "User, Admin")]
+    [AllowAnonymous]
     [HttpGet("GetAllSecretKeywords")]
     public async Task<IActionResult> GetAllSecretKeywords()
     {
@@ -23,6 +22,7 @@ public class SecretKeywords : ControllerBase
         return Ok(SecretKeywords);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("AddSecretKeyword")]
     public async Task<IActionResult> AddSecretKeyword(SecretKeywordDTO SecretKeywordDTO)
     {
@@ -34,6 +34,7 @@ public class SecretKeywords : ControllerBase
         return Ok(SecretKeyword);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("EditSecretKeyword")]
     public async Task<IActionResult> EditSecretKeyword(SecretKeywordDTO SecretKeywordDTO)
     {
@@ -45,6 +46,7 @@ public class SecretKeywords : ControllerBase
         return Ok(SecretKeyword);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("DeleteSecretKeyword")]
     public async Task<IActionResult> DeleteSecretKeyword(int id)
     {

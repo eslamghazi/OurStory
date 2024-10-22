@@ -59,6 +59,9 @@ builder.Services.AddTransient<IBlogs, BlogService>();
 // Add Dependency Injection For Lovers Service.
 builder.Services.AddTransient<ILovers, LoverService>();
 
+// Add Dependency Injection For SecretKeywords Service.
+builder.Services.AddTransient<ISecretKeywords, SecretKeywordsService>();
+
 // Add JwtHelper.
 builder.Services.AddScoped<JwtHelper>();
 

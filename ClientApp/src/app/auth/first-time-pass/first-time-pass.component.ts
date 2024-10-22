@@ -1,3 +1,4 @@
+import { AuthService } from './../Services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -9,15 +10,20 @@ import { Router } from '@angular/router';
 export class FirstTimePassComponent implements OnInit {
   currentYear = new Date().getFullYear();
   previousYear = new Date().getFullYear() - 1;
+  secretKeywords = JSON.parse(localStorage.getItem('secretKeywords'))
 
   constructor(private router: Router) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+  }
+
 
   signIn(password: string) {
-    console.log(password);
+    let firstTimePass = this.secretKeywords.find(x => x.title == "firstTimePass");
+    console.log(firstTimePass);
 
-    if (password == 'MabascotaStolenMaHeart') {
+    if (password == firstTimePass.keyword) {
       localStorage.setItem('firstTimePass', 'true');
       this.router.navigateByUrl('/auth/login');
     }

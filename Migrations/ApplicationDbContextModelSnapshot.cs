@@ -263,7 +263,7 @@ namespace OurStory.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreatedAt = new DateTime(2024, 10, 22, 9, 10, 41, 727, DateTimeKind.Local).AddTicks(2682),
+                            DateCreatedAt = new DateTime(2024, 10, 22, 10, 32, 0, 882, DateTimeKind.Local).AddTicks(7995),
                             Description = "aaaaaaaaaaaa",
                             ID_Blog_Type_LK = 1,
                             ID_Events_LK = 1,
@@ -274,7 +274,7 @@ namespace OurStory.Migrations
                         new
                         {
                             Id = 2,
-                            DateCreatedAt = new DateTime(2024, 10, 22, 9, 10, 41, 727, DateTimeKind.Local).AddTicks(2736),
+                            DateCreatedAt = new DateTime(2024, 10, 22, 10, 32, 0, 882, DateTimeKind.Local).AddTicks(8042),
                             Description = "bbbbbbbbbbbb",
                             ID_Blog_Type_LK = 1,
                             ID_Events_LK = 1,
