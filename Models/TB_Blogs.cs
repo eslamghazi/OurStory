@@ -23,20 +23,26 @@ public class TB_Blogs
     public LK_PublishedLookup LK_Published { get; set; }
 
     [Column(Order = 5)]
+    public List<TB_Likes>? TB_Likes { get; set; }
+
+    [Column(Order = 6)]
+    public List<TB_Comments>? TB_Comments { get; set; }
+
+    [Column(Order = 7)]
     [ForeignKey("LK_Events")]
     public int? ID_Events_LK { get; set; } = 0;
     public LK_EventsLookup LK_Events { get; set; }
 
-    [Column(Order = 6)]
+    [Column(Order = 8)]
     public DateTime? ItsDate { get; set; }
 
-    [Column(Order = 7)]
+    [Column(Order = 9)]
     public DateTime DateCreatedAt { get; set; }
 
-    [Column(Order = 8)]
+    [Column(Order = 10)]
     public List<TB_FilePaths>? TB_FilesPath { get; set; }
 
-    [Column(Order = 9)]
+    [Column(Order = 11)]
     [ForeignKey("TB_Lovers")]
     public int? ID_Lovers_TB { get; set; } = 0;
     public TB_Lovers TB_Lovers { get; set; }

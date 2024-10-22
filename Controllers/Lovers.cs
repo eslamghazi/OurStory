@@ -15,11 +15,14 @@ public class Lovers : ControllerBase
         _jwtHelper = jwtHelper;
         _LoverService = loverService;
     }
+
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
     {
-        var user = await _dbContext.TB_Lovers.FirstOrDefaultAsync(u => u.Name == loginRequest.Username);
+        var user = await _dbContext.TB_Lovers
+            .Include(x => x.TB_FilesPath_ProfilePicture)
+            .FirstOrDefaultAsync(u => u.Name == loginRequest.Username);
 
         if (user == null || !VerifyPassword(loginRequest.Password, user.Password))
         {
@@ -35,6 +38,7 @@ public class Lovers : ControllerBase
             Password = user.Password,
             Role = user.Role,
             Token = token,
+            ProfilePicture = user.TB_FilesPath_ProfilePicture
         };
 
         return Ok(loggedUserInfo);
@@ -46,7 +50,17 @@ public class Lovers : ControllerBase
         return password == storedHash;
     }
 
-    [HttpGet("GetAllDescriptions")]
+    [HttpGet("GetAllLovers")]
+    public async Task<IActionResult> GetAllLovers()
+    {
+
+        var Lovers = await _LoverService.GetAllLovers();
+
+
+        return Ok(Lovers);
+    }
+
+    [HttpGet("GetAllDescriptions/{loverId}")]
     public async Task<IActionResult> GetAllDescriptions(int loverId)
     {
 
@@ -68,7 +82,7 @@ public class Lovers : ControllerBase
         return Ok(Description);
     }
 
-    [HttpDelete("DeleteDescription")]
+    [HttpDelete("DeleteDescription/{id}")]
     public async Task<IActionResult> DeleteDescription(int id)
     {
 

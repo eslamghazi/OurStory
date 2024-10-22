@@ -13,6 +13,8 @@ public class UpdateLoverDTO
 
     public List<IFormFile>? Files { get; set; }
 
+    public IFormFile? ProfilePicture { get; set; }
+
     public DescriptionsDTO? Description { get; set; }
 
 }

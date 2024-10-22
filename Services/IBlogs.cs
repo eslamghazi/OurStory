@@ -8,5 +8,9 @@ public interface IBlogs
     Task<TB_Blogs> UpdateAsync(AddUpdateBlogsDTO blogDTO);
     Task<TB_Blogs> DeleteAsync(int id);
     Task<TB_FilePaths> DeleteFile(int id);
+    Task<TB_Blogs> AddCommentBlogAsync(CommentBlogDTO CommentBlogDTO);
+    Task<TB_Blogs> UpdateCommentBlogAsync(CommentBlogDTO CommentBlogDTO);
+    Task<TB_Blogs> UpdateLikeBlogAsync(LikeBlogDTO LikeBlogDTO);
+    Task<TB_Blogs> DeleteCommentBlogAsync(CommentBlogDTO CommentBlogDTO);
 
 }

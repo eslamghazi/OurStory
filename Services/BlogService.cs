@@ -1,5 +1,4 @@
-﻿
-namespace OurStory.Services;
+﻿namespace OurStory.Services;
 
 public class BlogService : IBlogs
 {
@@ -24,6 +23,12 @@ public class BlogService : IBlogs
             .Include(x => x.LK_Published)
             .Include(x => x.TB_FilesPath)
             .Include(x => x.TB_Lovers)
+            .Include(x => x.TB_Likes)
+            .ThenInclude(y => y.TB_Lover)
+            .Include(x => x.TB_Likes)
+            .ThenInclude(y => y.LK_LikesTypes)
+            .Include(x => x.TB_Comments)
+            .ThenInclude(y => y.TB_Lover)
             .ToListAsync();
 
         if (blogType != 0)
@@ -84,6 +89,12 @@ public class BlogService : IBlogs
                 .Include(x => x.LK_Published)
                 .Include(x => x.TB_FilesPath)
                 .Include(x => x.TB_Lovers)
+            .Include(x => x.TB_Likes)
+            .ThenInclude(y => y.TB_Lover)
+            .Include(x => x.TB_Likes)
+            .ThenInclude(y => y.LK_LikesTypes)
+            .Include(x => x.TB_Comments)
+            .ThenInclude(y => y.TB_Lover)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         return Blog;
@@ -173,6 +184,13 @@ public class BlogService : IBlogs
                 .Include(x => x.LK_Published)
                 .Include(x => x.TB_FilesPath)
                 .Include(x => x.TB_Lovers)
+                            .Include(x => x.TB_Likes)
+            .ThenInclude(y => y.TB_Lover)
+            .Include(x => x.TB_Likes)
+            .ThenInclude(y => y.LK_LikesTypes)
+            .Include(x => x.TB_Comments)
+            .ThenInclude(y => y.TB_Lover)
+
             .FirstOrDefaultAsync(x => x.Id == blogDTO.Id);
 
         if (Blog == null)
@@ -276,6 +294,159 @@ public class BlogService : IBlogs
         await _DbContext.SaveChangesAsync();
 
         return FileToBeRemoved;
+
+    }
+
+    public async Task<TB_Blogs> AddCommentBlogAsync(CommentBlogDTO CommentBlogDTO)
+    {
+        if (CommentBlogDTO == null)
+        {
+            throw new Exception("blogDTO is null.");
+        }
+
+        var Blog = await _DbContext.TB_OurBlogs
+            .Include(x => x.TB_Likes)
+            .Include(x => x.TB_Comments)
+            .Include(x => x.TB_Lovers)
+            .FirstOrDefaultAsync(x => x.Id == CommentBlogDTO.BlogId);
+
+        if (Blog == null)
+            throw new Exception($"Blog with ID {CommentBlogDTO.BlogId} not found.");
+
+        var Lover = await _DbContext.TB_Lovers
+            .Include(x => x.TB_FilesPath_ProfilePicture)
+            .FirstOrDefaultAsync(x => x.Id == CommentBlogDTO.LoverId);
+
+        if (Lover == null)
+            throw new Exception($"Lover with ID {CommentBlogDTO.LoverId} not found.");
+
+        TB_Comments TB_Comments = new TB_Comments();
+
+        TB_Comments.ID_Lover_TB = CommentBlogDTO.LoverId;
+        TB_Comments.Comment = CommentBlogDTO.Comment;
+
+        Blog.TB_Comments.Add(TB_Comments);
+
+        await _DbContext.SaveChangesAsync();
+
+        return Blog;
+
+    }
+
+    public async Task<TB_Blogs> UpdateCommentBlogAsync(CommentBlogDTO CommentBlogDTO)
+    {
+        if (CommentBlogDTO == null)
+        {
+            throw new Exception("blogDTO is null.");
+        }
+
+        var Blog = await _DbContext.TB_OurBlogs
+            .Include(x => x.TB_Likes)
+            .Include(x => x.TB_Comments)
+            .Include(x => x.TB_Lovers)
+            .FirstOrDefaultAsync(x => x.Id == CommentBlogDTO.BlogId);
+
+        if (Blog == null)
+            throw new Exception($"Blog with ID {CommentBlogDTO.BlogId} not found.");
+
+        var Lover = await _DbContext.TB_Lovers
+            .Include(x => x.TB_FilesPath_ProfilePicture)
+            .FirstOrDefaultAsync(x => x.Id == CommentBlogDTO.LoverId);
+
+        if (Lover == null)
+            throw new Exception($"Lover with ID {CommentBlogDTO.LoverId} not found.");
+
+        var CurrentComment = Blog.TB_Comments.FirstOrDefault(x => x.Id == CommentBlogDTO.CommentId);
+
+        if (CurrentComment == null)
+            throw new Exception($"Comment with ID {CommentBlogDTO.CommentId} not found.");
+
+        CurrentComment.Comment = CommentBlogDTO.Comment;
+
+        await _DbContext.SaveChangesAsync();
+
+        return Blog;
+
+    }
+
+    public async Task<TB_Blogs> UpdateLikeBlogAsync(LikeBlogDTO LikeBlogDTO)
+    {
+        if (LikeBlogDTO == null)
+        {
+            throw new Exception("blogDTO is null.");
+        }
+
+        var Blog = await _DbContext.TB_OurBlogs
+            .Include(x => x.TB_Likes)
+            .ThenInclude(x => x.TB_Lover)
+            .Include(x => x.TB_Likes)
+            .ThenInclude(x => x.LK_LikesTypes)
+            .Include(x => x.TB_Comments)
+            .Include(x => x.TB_Lovers)
+            .FirstOrDefaultAsync(x => x.Id == LikeBlogDTO.BlogId);
+
+        if (Blog == null)
+            throw new Exception($"Blog with ID {LikeBlogDTO.BlogId} not found.");
+
+        var Lover = await _DbContext.TB_Lovers
+            .Include(x => x.TB_FilesPath_ProfilePicture)
+            .FirstOrDefaultAsync(x => x.Id == LikeBlogDTO.LoverId);
+
+        if (Lover == null)
+            throw new Exception($"Lover with ID {LikeBlogDTO.LoverId} not found.");
+
+        var CurrentLike = Blog.TB_Likes.FirstOrDefault(x => x.Id == LikeBlogDTO.LikeId);
+
+        if (CurrentLike == null)
+        {
+            TB_Likes TB_Likes = new TB_Likes();
+
+            TB_Likes.ID_Lover_TB = LikeBlogDTO.LoverId;
+            TB_Likes.ID_LK_LikesTypes = LikeBlogDTO.LikeType;
+
+            Blog.TB_Likes.Add(TB_Likes);
+        }
+        else
+        {
+            if (LikeBlogDTO.IsDelete.Value)
+            {
+                Blog.TB_Likes.Remove(CurrentLike);
+            }
+            else
+            {
+                CurrentLike.ID_LK_LikesTypes = LikeBlogDTO.LikeType;
+            }
+
+        }
+
+        await _DbContext.SaveChangesAsync();
+
+        return Blog;
+
+    }
+
+    public async Task<TB_Blogs> DeleteCommentBlogAsync(CommentBlogDTO CommentBlogDTO)
+    {
+
+        var Blog = await _DbContext.TB_OurBlogs
+            .Include(x => x.TB_Likes)
+            .Include(x => x.TB_Comments)
+            .Include(x => x.TB_Lovers)
+            .FirstOrDefaultAsync(x => x.Id == CommentBlogDTO.BlogId);
+
+        if (Blog == null)
+            throw new Exception($"Blog with ID {CommentBlogDTO.BlogId} not found.");
+
+        var Comment = await _DbContext.TB_Comments.FirstOrDefaultAsync(x => x.Id == CommentBlogDTO.CommentId);
+
+        if (Comment == null)
+            throw new Exception($"Comment with ID {CommentBlogDTO.CommentId} not found.");
+
+        _DbContext.TB_Comments.Remove(Comment);
+
+        await _DbContext.SaveChangesAsync();
+
+        return Blog;
 
     }
 

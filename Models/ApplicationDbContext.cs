@@ -32,6 +32,11 @@ public class ApplicationDbContext : DbContext
     new LK_PublishedLookup { Id = 2, NameAr = "ليس بعد", NameEng = "NotYet" },
     new LK_PublishedLookup { Id = 3, NameAr = "منشوره", NameEng = "Published" });
 
+        modelBuilder.Entity<LK_LikesTypes>().HasData(
+    new LK_EventsLookup { Id = 1, NameAr = "اعجاب", NameEng = "Like" },
+    new LK_PublishedLookup { Id = 2, NameAr = "احبته", NameEng = "Love" },
+    new LK_PublishedLookup { Id = 3, NameAr = "اعتني به", NameEng = "Care" });
+
         modelBuilder.Entity<TB_Blogs>().HasData(
     new TB_Blogs { Id = 1, Title = "aa", Description = "aaaaaaaaaaaa", ID_Blog_Type_LK = 1, ID_Events_LK = 1, ID_Published_LK = 1, DateCreatedAt = DateTime.Now, ID_Lovers_TB = 1 },
     new TB_Blogs { Id = 2, Title = "bb", Description = "bbbbbbbbbbbb", ID_Blog_Type_LK = 1, ID_Events_LK = 1, ID_Published_LK = 1, DateCreatedAt = DateTime.Now, ID_Lovers_TB = 1 });
@@ -42,6 +47,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<TB_Descriptions> TB_Descriptions { get; set; }
     public DbSet<TB_Messages> TB_Messages { get; set; }
     public DbSet<TB_Blogs> TB_OurBlogs { get; set; }
+    public DbSet<TB_Likes> TB_Likes { get; set; }
+    public DbSet<TB_Comments> TB_Comments { get; set; }
     public DbSet<TB_FilePaths> TB_FilePaths { get; set; }
     public DbSet<LK_BlogTypeLookup> LK_BlogTypeLookup { get; set; }
     public DbSet<LK_EventsLookup> LK_EventsLookup { get; set; }

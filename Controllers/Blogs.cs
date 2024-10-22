@@ -33,8 +33,12 @@ public class Blogs : ControllerBase
             DateCreatedAt = item.DateCreatedAt,
             FilesPath = item.TB_FilesPath,
             Lovers = new TB_Lovers { Id = item.TB_Lovers.Id, Name = item.TB_Lovers.Name },
-
+            Comments = item.TB_Comments,
+            CommentsCount = item.TB_Comments.Count(),
+            Likes = item.TB_Likes,
+            LikesCount = item.TB_Likes.Count(),
         }).ToList();
+
 
         return Ok(new { status = 200, Data = blogsDTO });
 
@@ -48,9 +52,7 @@ public class Blogs : ControllerBase
         if (Blog == null)
             throw new Exception("لا توجد مدونه بهذا الرقم");
 
-        BlogsDTO blogsDTO = new BlogsDTO();
-
-        blogsDTO = new BlogsDTO()
+        BlogsDTO blogsDTO = new BlogsDTO()
         {
             Id = Blog.Id,
             Title = Blog.Title,
@@ -62,6 +64,10 @@ public class Blogs : ControllerBase
             DateCreatedAt = Blog.DateCreatedAt,
             FilesPath = Blog.TB_FilesPath,
             Lovers = new TB_Lovers { Id = Blog.TB_Lovers.Id, Name = Blog.TB_Lovers.Name },
+            Comments = Blog.TB_Comments,
+            CommentsCount = Blog.TB_Comments.Count(),
+            Likes = Blog.TB_Likes,
+            LikesCount = Blog.TB_Likes.Count(),
 
         };
 
@@ -78,7 +84,11 @@ public class Blogs : ControllerBase
         if (Blog == null)
             throw new Exception("لا يمكن إضافة المدونة");
 
-        return Ok(Blog);
+        var CommentsCount = Blog.TB_Comments.Count();
+
+        var LikesCount = Blog.TB_Likes.Count();
+
+        return Ok(new { Blog, LikesCount, CommentsCount });
     }
 
     [HttpPost(template: "UpdateBlog")]
@@ -90,10 +100,14 @@ public class Blogs : ControllerBase
         if (Blog == null)
             throw new Exception("لا يمكن تعديل المدونة");
 
-        return Ok(Blog);
+        var CommentsCount = Blog.TB_Comments.Count();
+
+        var LikesCount = Blog.TB_Likes.Count();
+
+        return Ok(new { Blog, LikesCount, CommentsCount });
     }
 
-    [HttpDelete("DeleteBlog")]
+    [HttpDelete("DeleteBlog/{id}")]
     public async Task<IActionResult> DeleteBlog(int id)
     {
 
@@ -102,10 +116,14 @@ public class Blogs : ControllerBase
         if (Blog == null)
             throw new Exception("لا يمكن حذف المدونة");
 
-        return Ok(Blog);
+        var CommentsCount = Blog.TB_Comments.Count();
+
+        var LikesCount = Blog.TB_Likes.Count();
+
+        return Ok(new { Blog, LikesCount, CommentsCount });
     }
 
-    [HttpDelete("DeleteFile")]
+    [HttpDelete("DeleteFile/{id}")]
     public async Task<IActionResult> DeleteFile(int id)
     {
 
@@ -115,6 +133,70 @@ public class Blogs : ControllerBase
             throw new Exception("لا يمكن حذف الملف");
 
         return Ok(File);
+    }
+
+    [HttpPost(template: "AddComment")]
+    public async Task<IActionResult> AddCommentBlogAsync([FromBody] CommentBlogDTO DTO)
+    {
+
+        var Blog = await _blogsService.AddCommentBlogAsync(DTO);
+
+        if (Blog == null)
+            throw new Exception("لا يمكن اضافة تعليف علي المدونة");
+
+        var CommentsCount = Blog.TB_Comments.Count();
+
+        var LikesCount = Blog.TB_Likes.Count();
+
+        return Ok(new { Blog, LikesCount, CommentsCount });
+    }
+
+    [HttpPost(template: "UpdateComment")]
+    public async Task<IActionResult> UpdateCommentBlogAsync([FromBody] CommentBlogDTO DTO)
+    {
+
+        var Blog = await _blogsService.UpdateCommentBlogAsync(DTO);
+
+        if (Blog == null)
+            throw new Exception("لا يمكن تعديل التعليف علي المدونة");
+
+        var CommentsCount = Blog.TB_Comments.Count();
+
+        var LikesCount = Blog.TB_Likes.Count();
+
+        return Ok(new { Blog, LikesCount, CommentsCount });
+    }
+
+    [HttpPost(template: "UpdateLike")]
+    public async Task<IActionResult> UpdateLikeBlogAsync([FromBody] LikeBlogDTO DTO)
+    {
+
+        var Blog = await _blogsService.UpdateLikeBlogAsync(DTO);
+
+        if (Blog == null)
+            throw new Exception("لا يمكن تعديل الاعجاب علي المدونة");
+
+        var CommentsCount = Blog.TB_Comments.Count();
+
+        var LikesCount = Blog.TB_Likes.Count();
+
+        return Ok(new { Blog, LikesCount, CommentsCount });
+    }
+
+    [HttpDelete(template: "DeleteComment")]
+    public async Task<IActionResult> DeleteCommentBlogAsync(CommentBlogDTO CommentBlogDTO)
+    {
+
+        var Blog = await _blogsService.DeleteCommentBlogAsync(CommentBlogDTO);
+
+        if (Blog == null)
+            throw new Exception("لا يمكن حذف التعليق من المدونة");
+
+        var CommentsCount = Blog.TB_Comments.Count();
+
+        var LikesCount = Blog.TB_Likes.Count();
+
+        return Ok(new { Blog, LikesCount, CommentsCount });
     }
 
 }

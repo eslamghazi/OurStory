@@ -122,6 +122,47 @@ namespace OurStory.Migrations
                         });
                 });
 
+            modelBuilder.Entity("OurStory.Models.Lookups.LK_LikesTypes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEng")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LK_LikesTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            NameAr = "اعجاب",
+                            NameEng = "Like"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            NameAr = "احبته",
+                            NameEng = "Love"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            NameAr = "اعتني به",
+                            NameEng = "Care"
+                        });
+                });
+
             modelBuilder.Entity("OurStory.Models.Lookups.LK_PublishedLookup", b =>
                 {
                     b.Property<int>("Id")
@@ -174,7 +215,7 @@ namespace OurStory.Migrations
 
                     b.Property<DateTime>("DateCreatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnOrder(7);
+                        .HasColumnOrder(9);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -187,11 +228,11 @@ namespace OurStory.Migrations
 
                     b.Property<int?>("ID_Events_LK")
                         .HasColumnType("int")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(7);
 
                     b.Property<int?>("ID_Lovers_TB")
                         .HasColumnType("int")
-                        .HasColumnOrder(9);
+                        .HasColumnOrder(11);
 
                     b.Property<int?>("ID_Published_LK")
                         .HasColumnType("int")
@@ -199,7 +240,7 @@ namespace OurStory.Migrations
 
                     b.Property<DateTime?>("ItsDate")
                         .HasColumnType("datetime2")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(8);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -222,7 +263,7 @@ namespace OurStory.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreatedAt = new DateTime(2024, 10, 20, 0, 28, 5, 499, DateTimeKind.Local).AddTicks(516),
+                            DateCreatedAt = new DateTime(2024, 10, 22, 6, 2, 5, 397, DateTimeKind.Local).AddTicks(2536),
                             Description = "aaaaaaaaaaaa",
                             ID_Blog_Type_LK = 1,
                             ID_Events_LK = 1,
@@ -233,7 +274,7 @@ namespace OurStory.Migrations
                         new
                         {
                             Id = 2,
-                            DateCreatedAt = new DateTime(2024, 10, 20, 0, 28, 5, 499, DateTimeKind.Local).AddTicks(563),
+                            DateCreatedAt = new DateTime(2024, 10, 22, 6, 2, 5, 397, DateTimeKind.Local).AddTicks(2615),
                             Description = "bbbbbbbbbbbb",
                             ID_Blog_Type_LK = 1,
                             ID_Events_LK = 1,
@@ -241,6 +282,36 @@ namespace OurStory.Migrations
                             ID_Published_LK = 1,
                             Title = "bb"
                         });
+                });
+
+            modelBuilder.Entity("OurStory.Models.TB_Comments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(1);
+
+                    b.Property<int?>("ID_Lover_TB")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.Property<int?>("TB_BlogsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ID_Lover_TB");
+
+                    b.HasIndex("TB_BlogsId");
+
+                    b.ToTable("TB_Comments");
                 });
 
             modelBuilder.Entity("OurStory.Models.TB_Descriptions", b =>
@@ -310,6 +381,37 @@ namespace OurStory.Migrations
                     b.ToTable("TB_FilePaths");
                 });
 
+            modelBuilder.Entity("OurStory.Models.TB_Likes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ID_LK_LikesTypes")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    b.Property<int?>("ID_Lover_TB")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.Property<int?>("TB_BlogsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ID_LK_LikesTypes");
+
+                    b.HasIndex("ID_Lover_TB");
+
+                    b.HasIndex("TB_BlogsId");
+
+                    b.ToTable("TB_Likes");
+                });
+
             modelBuilder.Entity("OurStory.Models.TB_Lovers", b =>
                 {
                     b.Property<int>("Id")
@@ -334,7 +436,12 @@ namespace OurStory.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
+                    b.Property<int?>("TB_FilesPath_ProfilePictureId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TB_FilesPath_ProfilePictureId");
 
                     b.ToTable("TB_Lovers");
 
@@ -435,6 +542,19 @@ namespace OurStory.Migrations
                     b.Navigation("TB_Lovers");
                 });
 
+            modelBuilder.Entity("OurStory.Models.TB_Comments", b =>
+                {
+                    b.HasOne("OurStory.Models.TB_Lovers", "TB_Lover")
+                        .WithMany()
+                        .HasForeignKey("ID_Lover_TB");
+
+                    b.HasOne("OurStory.Models.TB_Blogs", null)
+                        .WithMany("TB_Comments")
+                        .HasForeignKey("TB_BlogsId");
+
+                    b.Navigation("TB_Lover");
+                });
+
             modelBuilder.Entity("OurStory.Models.TB_Descriptions", b =>
                 {
                     b.HasOne("OurStory.Models.TB_Lovers", null)
@@ -457,6 +577,34 @@ namespace OurStory.Migrations
                         .HasForeignKey("TB_MessagesId");
                 });
 
+            modelBuilder.Entity("OurStory.Models.TB_Likes", b =>
+                {
+                    b.HasOne("OurStory.Models.Lookups.LK_LikesTypes", "LK_LikesTypes")
+                        .WithMany()
+                        .HasForeignKey("ID_LK_LikesTypes");
+
+                    b.HasOne("OurStory.Models.TB_Lovers", "TB_Lover")
+                        .WithMany()
+                        .HasForeignKey("ID_Lover_TB");
+
+                    b.HasOne("OurStory.Models.TB_Blogs", null)
+                        .WithMany("TB_Likes")
+                        .HasForeignKey("TB_BlogsId");
+
+                    b.Navigation("LK_LikesTypes");
+
+                    b.Navigation("TB_Lover");
+                });
+
+            modelBuilder.Entity("OurStory.Models.TB_Lovers", b =>
+                {
+                    b.HasOne("OurStory.Models.TB_FilePaths", "TB_FilesPath_ProfilePicture")
+                        .WithMany()
+                        .HasForeignKey("TB_FilesPath_ProfilePictureId");
+
+                    b.Navigation("TB_FilesPath_ProfilePicture");
+                });
+
             modelBuilder.Entity("OurStory.Models.TB_Messages", b =>
                 {
                     b.HasOne("OurStory.Models.TB_Lovers", "TB_Lovers_Receiver")
@@ -474,7 +622,11 @@ namespace OurStory.Migrations
 
             modelBuilder.Entity("OurStory.Models.TB_Blogs", b =>
                 {
+                    b.Navigation("TB_Comments");
+
                     b.Navigation("TB_FilesPath");
+
+                    b.Navigation("TB_Likes");
                 });
 
             modelBuilder.Entity("OurStory.Models.TB_Lovers", b =>

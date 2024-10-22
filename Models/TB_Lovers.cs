@@ -19,6 +19,9 @@ public class TB_Lovers
     public List<TB_FilePaths>? TB_FilesPath { get; set; } = new List<TB_FilePaths>();
 
     [Column(Order = 5)]
+    public TB_FilePaths? TB_FilesPath_ProfilePicture { get; set; }
+
+    [Column(Order = 6)]
     public List<TB_Descriptions>? TB_Description { get; set; } = new List<TB_Descriptions>();
 
 

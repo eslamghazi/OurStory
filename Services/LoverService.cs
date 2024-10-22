@@ -13,6 +13,19 @@ public class LoverService : ILovers
     }
 
 
+    public async Task<IEnumerable<TB_Lovers>> GetAllLovers()
+    {
+
+        var Lovers = await _DbContext.TB_Lovers
+            .Where(x => x.Name != "HeroSuperAdmin")
+        .Include(x => x.TB_Description)
+        .Include(x => x.TB_FilesPath_ProfilePicture)
+        .Include(x => x.TB_FilesPath)
+        .ToListAsync();
+
+        return Lovers;
+    }
+
     public async Task<IEnumerable<TB_Descriptions>> getAllDescriptions(int LoverId)
     {
 
@@ -50,7 +63,6 @@ public class LoverService : ILovers
 
     }
 
-
     public async Task<TB_Descriptions> DeleteDescription(int DescriptionId)
     {
         var Description = await _DbContext.TB_Descriptions
@@ -75,6 +87,7 @@ public class LoverService : ILovers
 
         var Lover = await _DbContext.TB_Lovers
                 .Include(x => x.TB_Description)
+                .Include(x => x.TB_FilesPath_ProfilePicture)
             .FirstOrDefaultAsync(x => x.Id == LoverDTO.Id);
 
         if (Lover == null)
@@ -95,6 +108,21 @@ public class LoverService : ILovers
                 item => new TB_FilePaths()
             );
         }
+        // Handle file uploads
+        if (LoverDTO.ProfilePicture != null)
+        {
+            Lover.TB_FilesPath_ProfilePicture = await HandleFileUploadAsync<TB_Lovers, TB_FilePaths>(
+       LoverDTO.ProfilePicture,
+       nameof(TB_Lovers),
+                LoverDTO.Name ?? Lover.Name,
+       "profilePictures",
+       Lover.TB_FilesPath_ProfilePicture,  // Passing the current file to replace
+       _DbContext.TB_FilePaths,
+       f => new TB_FilePaths()
+   );
+
+        }
+
 
         if (LoverDTO.Description != null)
         {
@@ -151,7 +179,6 @@ public class LoverService : ILovers
 
     }
 
-
     private async Task<List<TFilePath>> HandleFileUploadAsync<TEntity, TFilePath>(
    IEnumerable<IFormFile> files,
    string entityName,
@@ -174,7 +201,7 @@ public class LoverService : ILovers
                 throw new Exception("Only .png and .jpg images are allowed!");
 
             if (item.Length > _maxAllowedPosterSize)
-                throw new Exception("Max allowed size for poster is 1MB!");
+                throw new Exception("Max allowed size for File is 1MB!");
 
             // Path to save the file on the server
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/{folderPath}/{entityTitle}");
@@ -225,6 +252,74 @@ public class LoverService : ILovers
         }
 
         return existingFilePaths;
+    }
+    private async Task<TFilePath> HandleFileUploadAsync<TEntity, TFilePath>(
+    IFormFile file,  // Accept a single IFormFile
+    string entityName,
+    string entityTitle,
+    string folderPath,
+    TFilePath existingFilePath,  // Single file instead of list
+    DbSet<TFilePath> filePathsDbSet,
+    Func<IFormFile, TFilePath> createFilePathObject)
+    where TEntity : class
+    where TFilePath : class
+    {
+        if (file == null) return existingFilePath;
+
+        // Validate the file extension
+        if (!_allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+            throw new Exception("Only .png and .jpg images are allowed!");
+
+        // Validate the file size
+        if (file.Length > _maxAllowedPosterSize)
+            throw new Exception("Max allowed size for File is 1MB!");
+
+        // Path to save the file on the server
+        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/{folderPath}/{entityTitle}");
+
+        // Ensure the folder exists
+        if (!Directory.Exists(uploadsFolder))
+        {
+            Directory.CreateDirectory(uploadsFolder);
+        }
+
+        // If an existing file is found, delete it
+        if (existingFilePath != null)
+        {
+            var oldFilePath = Path.Combine(uploadsFolder, Path.GetFileName(((dynamic)existingFilePath).Path));
+            if (File.Exists(oldFilePath))
+            {
+                File.Delete(oldFilePath);
+            }
+
+            // Remove the old file from the database if it exists
+            filePathsDbSet.Remove(existingFilePath);
+        }
+
+        // Generate a unique file name for the new file
+        var fileName = $"{Guid.NewGuid()}_{file.FileName}";
+
+        // Full path to save the file
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
+        // Save the file to the server asynchronously
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+
+        // Generate the file URL
+        var fileUrl = $"{folderPath}/{entityTitle}/{fileName}";
+
+        // Create a new file path entry using the provided function
+        var newFilePath = createFilePathObject(file);
+        ((dynamic)newFilePath).Name = file.FileName;
+        ((dynamic)newFilePath).Path = fileUrl;
+
+        // Add the new file path entry to the database
+        await filePathsDbSet.AddAsync(newFilePath);
+
+        return newFilePath;  // Return the new file path (which will be stored in TB_FilesPath_ProfilePicture)
     }
 
 }

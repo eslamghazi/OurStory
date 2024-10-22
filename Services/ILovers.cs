@@ -2,6 +2,7 @@
 
 public interface ILovers
 {
+    Task<IEnumerable<TB_Lovers>> GetAllLovers();
     Task<IEnumerable<TB_Descriptions>> getAllDescriptions(int LoverId);
     Task<TB_Lovers> UpdateLover(UpdateLoverDTO Lover, bool IsEditDescription);
     Task<TB_Descriptions> UpdateDescription(DescriptionsDTO DescriptionDTO);

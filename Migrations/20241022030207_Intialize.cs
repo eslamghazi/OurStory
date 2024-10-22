@@ -42,6 +42,20 @@ namespace OurStory.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LK_LikesTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameEng = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LK_LikesTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LK_PublishedLookup",
                 columns: table => new
                 {
@@ -56,18 +70,18 @@ namespace OurStory.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TB_Lovers",
+                name: "TB_Comments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ID_Lover_TB = table.Column<int>(type: "int", nullable: true),
+                    TB_BlogsId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TB_Lovers", x => x.Id);
+                    table.PrimaryKey("PK_TB_Comments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,10 +97,43 @@ namespace OurStory.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TB_Descriptions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TB_FilePaths",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TB_BlogsId = table.Column<int>(type: "int", nullable: true),
+                    TB_LoversId = table.Column<int>(type: "int", nullable: true),
+                    TB_MessagesId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TB_FilePaths", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TB_Lovers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TB_FilesPath_ProfilePictureId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TB_Lovers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TB_Descriptions_TB_Lovers_TB_LoversId",
-                        column: x => x.TB_LoversId,
-                        principalTable: "TB_Lovers",
+                        name: "FK_TB_Lovers_TB_FilePaths_TB_FilesPath_ProfilePictureId",
+                        column: x => x.TB_FilesPath_ProfilePictureId,
+                        principalTable: "TB_FilePaths",
                         principalColumn: "Id");
                 });
 
@@ -160,32 +207,30 @@ namespace OurStory.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TB_FilePaths",
+                name: "TB_Likes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TB_BlogsId = table.Column<int>(type: "int", nullable: true),
-                    TB_LoversId = table.Column<int>(type: "int", nullable: true),
-                    TB_MessagesId = table.Column<int>(type: "int", nullable: true)
+                    ID_LK_LikesTypes = table.Column<int>(type: "int", nullable: true),
+                    ID_Lover_TB = table.Column<int>(type: "int", nullable: true),
+                    TB_BlogsId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TB_FilePaths", x => x.Id);
+                    table.PrimaryKey("PK_TB_Likes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TB_FilePaths_TB_Lovers_TB_LoversId",
-                        column: x => x.TB_LoversId,
+                        name: "FK_TB_Likes_LK_LikesTypes_ID_LK_LikesTypes",
+                        column: x => x.ID_LK_LikesTypes,
+                        principalTable: "LK_LikesTypes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TB_Likes_TB_Lovers_ID_Lover_TB",
+                        column: x => x.ID_Lover_TB,
                         principalTable: "TB_Lovers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_TB_FilePaths_TB_Messages_TB_MessagesId",
-                        column: x => x.TB_MessagesId,
-                        principalTable: "TB_Messages",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TB_FilePaths_TB_OurBlogs_TB_BlogsId",
+                        name: "FK_TB_Likes_TB_OurBlogs_TB_BlogsId",
                         column: x => x.TB_BlogsId,
                         principalTable: "TB_OurBlogs",
                         principalColumn: "Id");
@@ -215,6 +260,16 @@ namespace OurStory.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "LK_LikesTypes",
+                columns: new[] { "Id", "NameAr", "NameEng" },
+                values: new object[,]
+                {
+                    { 1, "اعجاب", "Like" },
+                    { 2, "احبته", "Love" },
+                    { 3, "اعتني به", "Care" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "LK_PublishedLookup",
                 columns: new[] { "Id", "NameAr", "NameEng" },
                 values: new object[,]
@@ -226,12 +281,12 @@ namespace OurStory.Migrations
 
             migrationBuilder.InsertData(
                 table: "TB_Lovers",
-                columns: new[] { "Id", "Name", "Password", "Role" },
+                columns: new[] { "Id", "Name", "Password", "Role", "TB_FilesPath_ProfilePictureId" },
                 values: new object[,]
                 {
-                    { 1, "Semsem", "SemsemFallInLoveWithHisBascota", "User" },
-                    { 2, "Bascota", "BascotaFallInLoveWithHerSemsem", "User" },
-                    { 3, "HeroSuperAdmin", "HeroWhatIsHero", "Admin" }
+                    { 1, "Semsem", "SemsemFallInLoveWithHisBascota", "User", null },
+                    { 2, "Bascota", "BascotaFallInLoveWithHerSemsem", "User", null },
+                    { 3, "HeroSuperAdmin", "HeroWhatIsHero", "Admin", null }
                 });
 
             migrationBuilder.InsertData(
@@ -239,9 +294,19 @@ namespace OurStory.Migrations
                 columns: new[] { "Id", "DateCreatedAt", "Description", "ID_Blog_Type_LK", "ID_Events_LK", "ID_Lovers_TB", "ID_Published_LK", "ItsDate", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 10, 20, 0, 28, 5, 499, DateTimeKind.Local).AddTicks(516), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
-                    { 2, new DateTime(2024, 10, 20, 0, 28, 5, 499, DateTimeKind.Local).AddTicks(563), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
+                    { 1, new DateTime(2024, 10, 22, 6, 2, 5, 397, DateTimeKind.Local).AddTicks(2536), "aaaaaaaaaaaa", 1, 1, 1, 1, null, "aa" },
+                    { 2, new DateTime(2024, 10, 22, 6, 2, 5, 397, DateTimeKind.Local).AddTicks(2615), "bbbbbbbbbbbb", 1, 1, 1, 1, null, "bb" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_Comments_ID_Lover_TB",
+                table: "TB_Comments",
+                column: "ID_Lover_TB");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_Comments_TB_BlogsId",
+                table: "TB_Comments",
+                column: "TB_BlogsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TB_Descriptions_TB_LoversId",
@@ -262,6 +327,26 @@ namespace OurStory.Migrations
                 name: "IX_TB_FilePaths_TB_MessagesId",
                 table: "TB_FilePaths",
                 column: "TB_MessagesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_Likes_ID_LK_LikesTypes",
+                table: "TB_Likes",
+                column: "ID_LK_LikesTypes");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_Likes_ID_Lover_TB",
+                table: "TB_Likes",
+                column: "ID_Lover_TB");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_Likes_TB_BlogsId",
+                table: "TB_Likes",
+                column: "TB_BlogsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TB_Lovers_TB_FilesPath_ProfilePictureId",
+                table: "TB_Lovers",
+                column: "TB_FilesPath_ProfilePictureId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TB_Messages_ID_Lovers_Receiver_TB",
@@ -292,13 +377,83 @@ namespace OurStory.Migrations
                 name: "IX_TB_OurBlogs_ID_Published_LK",
                 table: "TB_OurBlogs",
                 column: "ID_Published_LK");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TB_Comments_TB_Lovers_ID_Lover_TB",
+                table: "TB_Comments",
+                column: "ID_Lover_TB",
+                principalTable: "TB_Lovers",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TB_Comments_TB_OurBlogs_TB_BlogsId",
+                table: "TB_Comments",
+                column: "TB_BlogsId",
+                principalTable: "TB_OurBlogs",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TB_Descriptions_TB_Lovers_TB_LoversId",
+                table: "TB_Descriptions",
+                column: "TB_LoversId",
+                principalTable: "TB_Lovers",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TB_FilePaths_TB_Lovers_TB_LoversId",
+                table: "TB_FilePaths",
+                column: "TB_LoversId",
+                principalTable: "TB_Lovers",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TB_FilePaths_TB_Messages_TB_MessagesId",
+                table: "TB_FilePaths",
+                column: "TB_MessagesId",
+                principalTable: "TB_Messages",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TB_FilePaths_TB_OurBlogs_TB_BlogsId",
+                table: "TB_FilePaths",
+                column: "TB_BlogsId",
+                principalTable: "TB_OurBlogs",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_TB_FilePaths_TB_Lovers_TB_LoversId",
+                table: "TB_FilePaths");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_TB_Messages_TB_Lovers_ID_Lovers_Receiver_TB",
+                table: "TB_Messages");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_TB_Messages_TB_Lovers_ID_Lovers_Sender_TB",
+                table: "TB_Messages");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_TB_OurBlogs_TB_Lovers_ID_Lovers_TB",
+                table: "TB_OurBlogs");
+
+            migrationBuilder.DropTable(
+                name: "TB_Comments");
+
             migrationBuilder.DropTable(
                 name: "TB_Descriptions");
+
+            migrationBuilder.DropTable(
+                name: "TB_Likes");
+
+            migrationBuilder.DropTable(
+                name: "LK_LikesTypes");
+
+            migrationBuilder.DropTable(
+                name: "TB_Lovers");
 
             migrationBuilder.DropTable(
                 name: "TB_FilePaths");
@@ -317,9 +472,6 @@ namespace OurStory.Migrations
 
             migrationBuilder.DropTable(
                 name: "LK_PublishedLookup");
-
-            migrationBuilder.DropTable(
-                name: "TB_Lovers");
         }
     }
 }

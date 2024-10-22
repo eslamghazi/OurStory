@@ -20,6 +20,34 @@ public class BlogsDTO
 
     public List<TB_FilePaths>? FilesPath { get; set; }
     public List<IFormFile>? Files { get; set; }
+    public List<TB_Comments> Comments { get; set; }
+    public int CommentsCount { get; set; }
+    public List<TB_Likes> Likes { get; set; }
+    public int LikesCount { get; set; }
     public TB_Lovers Lovers { get; set; }
+
+}
+public class LikeBlogDTO
+{
+    public int BlogId { get; set; }
+
+    public int LoverId { get; set; }
+
+    public bool? IsDelete { get; set; } = false;
+
+    public int? LikeId { get; set; }
+
+    public int? LikeType { get; set; } = 1;
+
+}
+public class CommentBlogDTO
+{
+    public int BlogId { get; set; }
+
+    public int LoverId { get; set; }
+
+    public int? CommentId { get; set; }
+
+    public string? Comment { get; set; }
 
 }
